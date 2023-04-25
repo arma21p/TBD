@@ -1,0 +1,74 @@
+create function regresa_uno()
+returns int deterministic
+return 1;
+
+create function regresa_mensaje(cade varchar (50))
+returns varchar(50)regresa_unoregresa_mensaje deterministic
+return concat("hola ",cade);
+
+delimiter $$
+create function contar_actor()
+returns int reads sql data
+begin
+	declare cont int;
+    select count(*) into cont from actor;
+    return cont;
+end;$$
+delimiter ;
+
+
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \c --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': *********
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.31 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > \use eva_3
+Default schema set to `eva_3`.
+Fetching global names, object names from `eva_3` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_3  SQL > select regresa_uno();
++---------------+
+| regresa_uno() |
++---------------+
+|             1 |
++---------------+
+1 row in set (0.0030 sec)
+ MySQL  localhost:3306 ssl  eva_3  SQL > select regresa_mensaje('Armando');
++----------------------------+
+| regresa_mensaje('Armando') |
++----------------------------+
+| hola Armando               |
++----------------------------+
+1 row in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  eva_3  SQL > select regresa_mensaje('Armando') as Mensaje;
++--------------+
+| Mensaje      |
++--------------+
+| hola Armando |
++--------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  eva_3  SQL > create table actor select * rom sakila.actor;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'rom sakila.actor' at line 1
+ MySQL  localhost:3306 ssl  eva_3  SQL > create table actor select * from sakila.actor;
+Query OK, 200 rows affected (0.0695 sec)
+
+Records: 200  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_3  SQL > select contar_actor() as actores;
++---------+
+| actores |
++---------+
+|     200 |
++---------+
+1 row in set (0.0058 sec)
+ MySQL  localhost:3306 ssl  eva_3  SQL >
